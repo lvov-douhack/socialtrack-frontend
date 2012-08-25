@@ -59,6 +59,6 @@ $.storage = {
             if (typeof(inc) !== 'undefined')
                 inc = 1;
             
-            $.storage.set(path, $.storage.get(path) + $.storage.get('config.waste_interval'));
+            $.storage.set(path, $.storage.get(path) + inc);
         }
 };
