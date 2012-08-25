@@ -13,7 +13,7 @@
 // $storage.set('test.tmp.foo': 'bar')  // will change previous to 
 // test     |   {'ololo': 100500, 'tmp': {'sdf': 'ololo', 'k': 'v', 'foo': 'bar'}}
 
-var $storage = {
+$.storage = {
         'get': function(path){
             var spath = path.split('.');
             
