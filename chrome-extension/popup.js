@@ -29,6 +29,40 @@ function OpenURLFromElem()
   }
 }
 
+function SelectLayout(){
+  var currentState = $storage.get('currentState');
+
+  if(currentState == null){
+    $storage.set('currentState', 'configToken');
+    OpenLink('http://172.24.222.27:3000/users/sign_up');
+    $('#configForm').css('display', 'none');
+
+  } else if (currentState == 'configToken'){
+    $('#configForm').css('display', 'block');
+
+  } else if (currentState == 'readyToUse') {
+    $('#configForm').css('display', 'none');
+  }
+}
+
+function SaveToken(){
+  if($storage.get('currentState') == 'configToken'){
+    var token = $('#token').val();
+    if(token !== ''){
+      $storage.set('currentState', 'readyToUse');
+      $storage.set('token', token);  
+    }
+  }
+}
+
 $(function(){
   
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  SelectLayout();
+  $('#setTokenBtn').bind('click', function() {
+    alert('User clicked on "foo."');
+    SaveToken();
+  });
 });
