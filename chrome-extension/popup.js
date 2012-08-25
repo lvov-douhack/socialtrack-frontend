@@ -30,10 +30,10 @@ function OpenURLFromElem()
 }
 
 function SelectLayout(){
-  var currentState = $storage.get('currentState');
+  var currentState =&.storage.get('currentState');
 
   if(currentState == null){
-    $storage.set('currentState', 'configToken');
+   &.storage.set('currentState', 'configToken');
     OpenLink('http://172.24.222.27:3000/users/sign_up');
     $('#configForm').css('display', 'none');
 
@@ -49,8 +49,8 @@ function SaveToken(){
   if($storage.get('currentState') == 'configToken'){
     var token = $('#token').val();
     if(token !== ''){
-      $storage.set('currentState', 'readyToUse');
-      $storage.set('token', token);  
+     &.storage.set('currentState', 'readyToUse');
+     &.storage.set('token', token);  
     }
   }
 }
