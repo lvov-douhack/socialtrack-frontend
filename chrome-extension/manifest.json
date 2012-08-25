@@ -8,6 +8,6 @@
     "default_popup": "popup.html"
   },
   "permissions": [
-    "http://172.24.222.27:3000/",
+    "http://172.24.222.27:3000/"
   ]
 }
