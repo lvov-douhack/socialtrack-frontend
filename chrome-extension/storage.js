@@ -54,5 +54,11 @@ $.storage = {
                 $.extend(true, v, val);
             
             $.totalStorage(key, v);
+        },
+        'inc': function(path, inc){
+            if (typeof(inc) !== 'undefined')
+                inc = 1;
+            
+            $.storage.set(path, $.storage.get(path) + $.storage.get('config.waste_interval'));
         }
 };
