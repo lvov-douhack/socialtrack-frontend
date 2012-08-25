@@ -7,6 +7,9 @@
     "default_icon": "icon.ico",
     "default_popup": "popup.html"
   },
+  "background": {
+    "page": "background.html"
+  },
   "permissions": [
     "http://172.24.222.27:3000/"
   ]
