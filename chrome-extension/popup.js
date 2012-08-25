@@ -53,6 +53,7 @@ function UpdateLayout(currentState){
 function SaveToken(){
   if($.storage.get('runtime.currentState') == 'configToken'){
     var token = $('#token').val();
+    alert(token);
     if(token !== ''){
      $.storage.set('token', token);
      UpdateStatus('readyToUse');
@@ -62,12 +63,12 @@ function SaveToken(){
 }
 
 function UpdateStatus(newStatus){
-  $.storage.set('currentState', newStatus);
+  $.storage.set('runtime.currentState', newStatus);
   UpdateLayout(newStatus);
 }
 
 function SetDefaultConfig(){
-  var $config = {
+  var config = {
      'sites': [
         {'id': 0, 'name': 'VK', 'mask': 'vk.com'},
         {'id': 1, 'name': 'Facebook', 'mask': 'facebook.com'}, 
