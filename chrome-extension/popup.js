@@ -30,47 +30,59 @@ function OpenURLFromElem()
 }
 
 function SelectLayout(){
-  var currentState = $.storage.get('currentState');
+  var currentState = $.storage.get('runtime.currentState');
   UpdateLayout(currentState);  
 }
 
 function UpdateLayout(currentState){
   if(currentState == null){
-    $.storage.set('currentState', 'configToken');
-    OpenLink('http://172.24.222.27:3000/users/sign_up');
+    $.storage.set('runtime.currentState', 'configToken');
     $('#configForm').css('display', 'none');
-    window.close();
+    OpenLink('http://172.24.222.27:3000/users/sign_up');
+    ClosePopup();
 
   } else if (currentState == 'configToken'){
     $('#configForm').css('display', 'block');
 
   } else if (currentState == 'readyToUse') {
     $('#configForm').css('display', 'none');
-    $('#rtu').val('READY');
+    $('#content').text('READY');
   }
 }
 
 function SaveToken(){
-  if($.storage.get('currentState') == 'configToken'){
+  if($.storage.get('runtime.currentState') == 'configToken'){
     var token = $('#token').val();
     if(token !== ''){
      $.storage.set('token', token);
      UpdateStatus('readyToUse');
+     SetDefaultConfig();
     }
   }
 }
 
-$(function(){
-  
-});
-
 function UpdateStatus(newStatus){
-  $.storage.set('currentState', 'readyToUse');
+  $.storage.set('currentState', newStatus);
   UpdateLayout(newStatus);
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  SelectLayout();
+function SetDefaultConfig(){
+  var $config = {
+     'sites': [
+        {'id': 0, 'name': 'VK', 'mask': 'vk.com'},
+        {'id': 1, 'name': 'Facebook', 'mask': 'facebook.com'}, 
+        {'id': 2, 'name': 'Twitter', 'mask': 'twitter.com'},
+        {'id': 3, 'name': 'Habrahabr', 'mask': '(habra)?habr.ru'}
+       ],
+     'siteRegexp': '/^(\w+:\/\/[^\/]+).*$/',
+     'waste_interval': 1000,  
+     'API_URL': 'http://172.24.222.27:3000/api/'
+   };
+   $.storage.set('config', config);
+}
+
+$(function() {
+ SelectLayout();
   $('#setTokenBtn').bind('click', function() {
     SaveToken();
   });

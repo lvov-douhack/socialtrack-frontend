@@ -14,6 +14,7 @@ authors: wk, G3D, vessi, zasadnyy
       body {
         min-width:357px;
         overflow-x:hidden;
+        font:14px arial,sans-serif;
       }
 
       img {
@@ -25,6 +26,22 @@ authors: wk, G3D, vessi, zasadnyy
         max-width: 75px;
         max-height: 75px;
       }
+
+      #configForm {
+
+      }
+
+      #infoPanel {
+        font:10px arial, sans-serif;
+        border-top-style: solid;
+        border-top-width: 1px;
+        border-top-color: #C7C7C7;
+        text-align: right;
+      }
+
+      #infoPanel a {
+        color: #027AFA;
+      }
     </style>
 
     <!-- JavaScript and HTML must be in separate files for security. -->
@@ -35,16 +52,17 @@ authors: wk, G3D, vessi, zasadnyy
   </head>
   
   <body>
+
     <div id = "configForm">
-        Token: <input type="text" name="token" />
-        <button id="setTokenBtn">Set</button>
+        Paste your token here <input type="text" name="token" />
+        <button id="setTokenBtn">GO!</button>
     </div>
 
-    <div id = "rtu">READY TO USE</div>
+    <div id = "content">READY TO USE</div>
    
-  	<p>
-	  	©2012 #douhack,<br />
-	  	authors: wk, G3D, vessi, zasadnyy
-  	</p>
+  	<div id="infoPanel">
+      <a href="http://172.24.222.27:3000/#">Sexy stats</a> | <a href="options.html">Settings</a>
+    </div>
+
   </body>
 </html>

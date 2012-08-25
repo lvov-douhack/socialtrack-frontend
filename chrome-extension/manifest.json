@@ -3,6 +3,7 @@
   "version": "1.0",
   "manifest_version": 2,
   "description": "This extension counts wasted time. ©2012 #douhack / wk, G3D, vessi, zasadnyy",
+  "options_page": "options.html",
   "browser_action": {
     "default_icon": "icon.ico",
     "default_popup": "popup.html"
