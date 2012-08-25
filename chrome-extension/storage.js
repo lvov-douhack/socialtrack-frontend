@@ -30,6 +30,8 @@ $.storage = {
             
             while (typeof(p = spath.shift()) !== 'undefined')
             {
+                if (typeof(res) === 'undefined' || res === null)
+                    return null;
                 res = res[p];
                 if (typeof(res) === 'undefined')
                     return null;
