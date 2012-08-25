@@ -9,8 +9,8 @@
 // USAGE:
 // assuming there is following entry in localStorage:
 // test     |   {'ololo': 100500, 'tmp': {'sdf': 'ololo', 'k': 'v'}}
-// $storage.get('test.tmp.k')           // will return "v"
-// $storage.set('test.tmp.foo': 'bar')  // will change previous to 
+// $.storage.get('test.tmp.k')           // will return "v"
+// $.storage.set('test.tmp.foo': 'bar')  // will change previous to 
 // test     |   {'ololo': 100500, 'tmp': {'sdf': 'ololo', 'k': 'v', 'foo': 'bar'}}
 
 $.storage = {
