@@ -30,27 +30,32 @@ function OpenURLFromElem()
 }
 
 function SelectLayout(){
-  var currentState = $storage.get('currentState');
+  var currentState = $.storage.get('currentState');
+  UpdateLayout(currentState);  
+}
 
+function UpdateLayout(currentState){
   if(currentState == null){
-    $storage.set('currentState', 'configToken');
+    $.storage.set('currentState', 'configToken');
     OpenLink('http://172.24.222.27:3000/users/sign_up');
     $('#configForm').css('display', 'none');
+    window.close();
 
   } else if (currentState == 'configToken'){
     $('#configForm').css('display', 'block');
 
   } else if (currentState == 'readyToUse') {
     $('#configForm').css('display', 'none');
+    $('#rtu').val('READY');
   }
 }
 
 function SaveToken(){
-  if($storage.get('currentState') == 'configToken'){
+  if($.storage.get('currentState') == 'configToken'){
     var token = $('#token').val();
     if(token !== ''){
-      $storage.set('currentState', 'readyToUse');
-      $storage.set('token', token);  
+     $.storage.set('token', token);
+     UpdateStatus('readyToUse');
     }
   }
 }
@@ -59,10 +64,14 @@ $(function(){
   
 });
 
+function UpdateStatus(newStatus){
+  $.storage.set('currentState', 'readyToUse');
+  UpdateLayout(newStatus);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   SelectLayout();
   $('#setTokenBtn').bind('click', function() {
-    alert('User clicked on "foo."');
     SaveToken();
   });
 });
