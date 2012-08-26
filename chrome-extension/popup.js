@@ -32,13 +32,15 @@ function SelectLayout() {
 }
 
 function UpdateLayout(currentState) {
-  if(currentState == null){
+    if ($.storage.get('config.token') !== null && currentState == null)
+        currentState == 'readyToUse';
+  if(currentState == null) {
     $.storage.set('config.currentState', 'configToken');
     $('#configForm').css('display', 'none');
     OpenLink('http://172.24.222.27:3000/users/sign_up');
     ClosePopup();
 
-  } else if (currentState == 'configToken'){
+  } else if (currentState == 'configToken') {
     $('#configForm').css('display', 'block');
 
   } else if (currentState == 'readyToUse') {
