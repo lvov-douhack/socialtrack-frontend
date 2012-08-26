@@ -1,12 +1,10 @@
-var validator = {
-    'detectSite': function(address) {
-        $($.storage.get('config.sites')).each(function(id, site) {
-            if (adderess.match(site.mask))
-                return {'id': id, 'site': site};
-        });
-        return false;
-    },
-};
+function detectSite(address) {
+    $($.storage.get('config.sites')).each(function(id, site) {
+        if (adderess.match(site.mask))
+            return site;
+    });
+    return false;
+}
 
 wastedTimeManager = {
     /**
@@ -157,28 +155,14 @@ $(function(){
         $.storage.set('stats.since', new Date());
     config = $.storage.get('config');
 
-  if (!localStorage.paused) {
-    localStorage.paused = "false";
-  }
-
-  if (localStorage["paused"] == "true") {
-    pause();
-  }
+    $($.storage.get('config.sites')).each(function(id, site) {
+        this.resume(site.id);
+    });
 
     chrome.browserAction.onClicked.addListener(function(tab) {
         wastedTimeManager.sendStatistics();
     });
     
-  /* Add some listeners for tab changing events. We want to update our
-  *  counters when this sort of stuff happens. */
-  chrome.tabs.onSelectionChanged.addListener(
-  function(tabId, selectionInfo) {
-    console.log("Tab changed");
-    resetActivity();
-    currentTabId = tabId;
-    updateCounter();
-  });
-
   chrome.tabs.onUpdated.addListener(
   function(tabId, changeInfo, tab) {
     if (tabId == currentTabId) {
@@ -199,40 +183,30 @@ $(function(){
     });
   });
 
-  /* Listen for update requests. These come from the popup. */
-  chrome.extension.onRequest.addListener(
-    function(request, sender, sendResponse) {
-      if (request.action == "sendStats") {
-        console.log("Sending statistics by request.");
-        sendStatistics();
-        sendResponse({});
-      } else if (request.action == "addIgnoredSite") {
-        addIgnoredSite(request.site);
-        sendResponse({});
-      } else if (request.action == "pause") {
-        pause();
-      } else if (request.action == "resume") {
-        resume();
-      } else {
-        console.log("Invalid action given.");
-      }
-    });
-
     chrome.extension.onConnect.addListener(function(port) {
       console.assert(port.name == "idle");
       port.onMessage.addListener(function(msg) {
-        resetActivity();
+          if (msg.site)
+          {    
+              var site = detectSite(msg.site);
+              if (!site)
+                  return;
+              wastedTimeManager.resetActivity(site.id);
+              port.postMessage({'site_id': site.id});
+          }
+          else if (msg.site_id)
+              wastedTimeManager.resetActivity(msg.site_id);
       });
     });
 
   /* Force an update of the counter every minute. Otherwise, the counter
      only updates for selection or URL changes. */
-  $.timer(wastedTimeManager.updateCounter, $.storage.get('config.updateCounterInterval'));
+  $.timer(wastedTimeManager.updateCounter, $.storage.get('config.waste_interval'), true);
 
   // Send statistics periodically.
-  console.log("Sending stats interval " + localStorage["sendStatsInterval"]);
-  window.setInterval(sendStatistics, localStorage["sendStatsInterval"]);
+  console.log("Sending stats interval " + $.storage.get('config.sendStatsInterval'));
+  $.timer(sendStatistics, $.storage.get('config.sendStatsInterval'), true);
 
   // Keep track of idle time.
-  window.setInterval(checkIdleTime, 10 * 1000);
+  $.timer(checkIdleTime, 10 * 1000, true);
 });
