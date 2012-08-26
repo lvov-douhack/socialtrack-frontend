@@ -39,7 +39,7 @@ function UpdateLayout(currentState) {
     OpenLink('http://172.24.222.27:3000/users/sign_up');
     ClosePopup();
 
-  } else if (currentState == 'configToken'){
+  } else if (currentState == 'configToken') {
     $('#configForm').css('display', 'block');
     $('#content').css('display', 'none');
 
