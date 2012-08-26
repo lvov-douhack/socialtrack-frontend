@@ -6,21 +6,18 @@
 
 // wK
 
-function OpenLink(url)
-{
+function OpenLink(url) {
     if (typeof(url) !== 'undefined')
         chrome.tabs.create({url: url});
     else    
         throw new Exception('Invalid URL!');
 }
 
-function ClosePopup()
-{
+function ClosePopup() {
   window.close();
 }
 
-function OpenURLFromElem()
-{
+function OpenURLFromElem() {
   if (event && event.target)
   {
     var url = event.currentTarget.getAttribute("url");
@@ -29,14 +26,14 @@ function OpenURLFromElem()
   }
 }
 
-function SelectLayout(){
-  var currentState = $.storage.get('runtime.currentState');
+function SelectLayout() {
+  var currentState = $.storage.get('config.currentState');
   UpdateLayout(currentState);  
 }
 
-function UpdateLayout(currentState){
+function UpdateLayout(currentState) {
   if(currentState == null){
-    $.storage.set('runtime.currentState', 'configToken');
+    $.storage.set('config.currentState', 'configToken');
     $('#configForm').css('display', 'none');
     OpenLink('http://172.24.222.27:3000/users/sign_up');
     ClosePopup();
@@ -51,9 +48,8 @@ function UpdateLayout(currentState){
 }
 
 function SaveToken(){
-  if($.storage.get('runtime.currentState') == 'configToken'){
+  if($.storage.get('config.currentState') == 'configToken'){
     var token = $('#token').val();
-    // alert(token);
     if(token !== ''){
      $.storage.set('config.token', token);
      UpdateStatus('readyToUse');
@@ -63,7 +59,7 @@ function SaveToken(){
 }
 
 function UpdateStatus(newStatus){
-  $.storage.set('runtime.currentState', newStatus);
+  $.storage.set('config.currentState', newStatus);
   UpdateLayout(newStatus);
 }
 
@@ -91,8 +87,8 @@ function ClearRuntime() {
 }
 
 $(function() {
-    ClearRuntime();
- SelectLayout();
+  //ClearRuntime();
+  SelectLayout();
   $('#setTokenBtn').bind('click', function() {
     SaveToken();
   });
