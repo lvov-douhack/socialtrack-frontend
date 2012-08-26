@@ -91,7 +91,7 @@ wastedTimeManager = {
             $($.storage.get('config.sites')).each(function(id, site) {
                 this.resume(site.id);
             });
-            alert('fail');
+            //alert('fail');
         })
         .done(function(){
             alert('done');
@@ -143,13 +143,13 @@ $(function(){
         wastedTimeManager.sendStatistics();
     });
     
-  chrome.tabs.onUpdated.addListener(
+/*  chrome.tabs.onUpdated.addListener(
   function(tabId, changeInfo, tab) {
     if (tabId == currentTabId) {
       console.log("Tab updated");
       wastedTimeManager.updateCounter();
     }
-  });
+  });*/
 
     chrome.extension.onConnect.addListener(function(port) {
       console.assert(port.name == "idle");
@@ -176,5 +176,5 @@ $(function(){
   $.timer(wastedTimeManager.sendStatistics, $.storage.get('config.sendStatsInterval'), true);
 
   // Keep track of idle time.
-  $.timer(wastedTimeManager.checkIdleTime, 10 * 1000, true);
+  $.timer(wastedTimeManager.checkIdleTime, $.storage.get('config.updateCounterInterval'), true);
 });
