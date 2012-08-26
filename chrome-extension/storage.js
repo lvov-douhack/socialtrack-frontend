@@ -61,6 +61,6 @@ $.storage = {
             if (typeof(inc) !== 'undefined')
                 inc = 1;
             
-            $.storage.set(path, $.storage.get(path) + inc);
+            $.storage.set(path, (typeof($.storage.get(path)) !== 'undefined' ? parseInt($.storage.get(path)) : 0) + parseInt(inc));
         }
 };

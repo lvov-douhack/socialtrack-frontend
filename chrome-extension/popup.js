@@ -53,9 +53,9 @@ function UpdateLayout(currentState){
 function SaveToken(){
   if($.storage.get('runtime.currentState') == 'configToken'){
     var token = $('#token').val();
-    alert(token);
+    // alert(token);
     if(token !== ''){
-     $.storage.set('token', token);
+     $.storage.set('config.token', token);
      UpdateStatus('readyToUse');
      SetDefaultConfig();
     }
@@ -70,19 +70,28 @@ function UpdateStatus(newStatus){
 function SetDefaultConfig(){
   var config = {
      'sites': [
-        {'id': 0, 'name': 'VK', 'mask': 'vk.com'},
-        {'id': 1, 'name': 'Facebook', 'mask': 'facebook.com'}, 
-        {'id': 2, 'name': 'Twitter', 'mask': 'twitter.com'},
-        {'id': 3, 'name': 'Habrahabr', 'mask': '(habra)?habr.ru'}
+        {'id': 0, 'name': 'VK', 'mask': 'https?:\/\/([^\.]*\\.)?vk\.com\/.*'},
+        {'id': 1, 'name': 'Facebook', 'mask': 'https?:\/\/([^\.]*\\.)?facebook\.com\/.*'}, 
+        {'id': 2, 'name': 'Twitter', 'mask': 'https?:\/\/([^\.]*\\.)?twitter\.com\/.*'},
+        {'id': 3, 'name': 'Habrahabr', 'mask': 'https?:\/\/([^\.]*\\.)?(habra)?habr\.ru\/.*'}
        ],
      'siteRegexp': '/^(\w+:\/\/[^\/]+).*$/',
-     'waste_interval': 1000,  
-     'API_URL': 'http://172.24.222.27:3000/api/'
+     'waste_interval': 1000,                        // 1 second
+     'updateCounterInterval': 1000 * 60,            // 1 minute
+     'sendStatsInterval': 3600 * 10,                // 10 minutes
+     'API_URL': 'http://172.24.222.27:3000/api/',
+     'idleDetection': 'true'
    };
    $.storage.set('config', config);
 }
 
+function ClearRuntime() {
+    //$.storage.set('runtime', null);
+    localStorage.removeItem('runtime'); // костиль
+}
+
 $(function() {
+    ClearRuntime();
  SelectLayout();
   $('#setTokenBtn').bind('click', function() {
     SaveToken();

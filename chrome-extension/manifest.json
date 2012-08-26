@@ -3,13 +3,28 @@
   "version": "1.0",
   "manifest_version": 2,
   "description": "This extension counts wasted time. ©2012 #douhack / wk, G3D, vessi, zasadnyy",
+  "icons": {
+	"32": "icon.png"
+  },
   "options_page": "options.html",
+  "permissions": [ "tabs" ],
   "browser_action": {
     "default_icon": "icon.ico",
+    "default_title": "Wasted Time Tracker",
     "default_popup": "popup.html"
   },
+  "content_scripts": [ {
+     "js": [ "idle.js" ],
+     "matches": [ "http://*/*", "http://*/*" ]
+  } ],
   "background": {
-    "page": "background.html"
+    "scripts": [
+    			"jquery-1.7.2.min.js", 
+    			"jquery.total-storage.min.js", 
+    			"jquery.timer.js", 
+    			"storage.js", 
+    			"background.js" 
+    		   ]
   },
   "permissions": [
     "http://172.24.222.27:3000/"
