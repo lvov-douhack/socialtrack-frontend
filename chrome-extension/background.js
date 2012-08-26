@@ -103,52 +103,32 @@ wastedTimeManager = {
     /**
      * Updates the counter for the current tab.
      */
-    function updateCounter() {
-      /* Don't run if we are paused. */
-      if (this.is_paused())
-        return;
-
-      if (currentTabId == null) {
-        return;
-      }
-
-      chrome.tabs.get(currentTabId, function(tab) {
+    'updateCounter': function() {
+      chrome.tabs.getSelected(null, function(tab) {
         /* Make sure we're on the focused window, otherwise we're recording bogus stats. */
         chrome.windows.get(tab.windowId, function(window) {
           if (!window.focused) {
             return;
           }
-          var site = getSiteFromUrl(tab.url);
-          if (site == null) {
+          var site = detectSite(tab.url);
+          if (!site) {
             console.log("Unable to update counter. Malformed url.");
-            return;
-          }
-
-          /* We can't update any counters if this is the first time visiting any
-           * site. This happens on browser startup. Initialize some variables so
-           * we can perform an update next time. */
-          if (currentSite == null) {
-            currentSite = site;
-            startTime = new Date();
             return;
           }
 
           /* Update the time spent for this site by comparing the current time to
            * the last time we were ran. */
           var now = new Date();
-          var delta = now.getTime() - startTime.getTime();
-          this.waste(currentSite, delta/1000);
+          var delta = now.getTime() - $.storage.get('stats.since').getTime();
+          this.waste(site.id, delta / 1000);
 
           /* This function could have been called as the result of a tab change,
            * which means the site may have changed. */
-          currentSite = site;
-          startTime = now;
+          $.storage.set('stats.since', now);
         });
       });
     }    
 };
-
-////////////////////////////////////////////////////////////////////////
 
 $(function(){
     if ($.storage.get('stats.since') == null)
@@ -167,20 +147,8 @@ $(function(){
   function(tabId, changeInfo, tab) {
     if (tabId == currentTabId) {
       console.log("Tab updated");
-      updateCounter();
+      wastedTimeManager.updateCounter();
     }
-  });
-
-  chrome.windows.onFocusChanged.addListener(
-  function(windowId) {
-    console.log("Detected window focus changed.");
-    resetActivity();
-    chrome.tabs.getSelected(windowId,
-    function(tab) {
-      console.log("Window/Tab changed");
-      currentTabId = tab.id;
-      updateCounter();
-    });
   });
 
     chrome.extension.onConnect.addListener(function(port) {
@@ -205,8 +173,8 @@ $(function(){
 
   // Send statistics periodically.
   console.log("Sending stats interval " + $.storage.get('config.sendStatsInterval'));
-  $.timer(sendStatistics, $.storage.get('config.sendStatsInterval'), true);
+  $.timer(wastedTimeManager.sendStatistics, $.storage.get('config.sendStatsInterval'), true);
 
   // Keep track of idle time.
-  $.timer(checkIdleTime, 10 * 1000, true);
+  $.timer(wastedTimeManager.checkIdleTime, 10 * 1000, true);
 });
