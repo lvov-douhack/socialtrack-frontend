@@ -1,10 +1,11 @@
-﻿// Copyright (c) 2012 #douhack
-// @author: webknjaz
-// @version: 1.0.2 Alpha
-// @license: GNU/GPL v3
-// vim: set sw=2 sts=2 ts=8 et syntax=javascript:
-
-// This file depends on JQuery $.totalStorage
+﻿// vim: set sw=2 sts=2 ts=8 et syntax=javascript:
+/*
+@copyright: (c) 2012, #douhack
+@author: webknjaz
+@version: 1.0.2 Beta
+@license: GNU/GPL v3
+@depends on: JQuery and $.totalStorage plugin
+*/
 
 /***********************************************************************************
  *                                                                                 *
